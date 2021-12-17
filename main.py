@@ -55,7 +55,40 @@ if __name__ == '__main__':
     alarms = df.alarms
     date = df.date
 
+    #date_val, floor_1 = get_area_data("floor_1")
+    #date_val_1, floor_2 = get_area_data("floor_2")
+    #date_val_2, floor_3 = get_area_data("floor_3")
+    #date_val_3, front_desk = get_area_data("front_desk")
 
+    figure(figsize=(15, 8))
+    plt.subplot(3, 2, 1)
+    #plt.plot(date_val, floor_1.totals, color="green", label="Floor_1")
+
+
+    plt.subplot(3, 2, 2)
+    #plt.plot(date_val_1, floor_2.totals, color="red", label="Floor_2")
+
+
+    plt.subplot(3, 2, 3)
+    #plt.plot(date_val_2, floor_3.totals, color="blue", label="Floor_3")
+
+
+    plt.subplot(3, 2, 4)
+    #plt.plot(date_val_3, front_desk.totals, color="black", label="Front_desk")
+
+    plt.subplot(3, 2, 5)
+    #plt.plot(date_val, floor_1.totals, label="Floor 1")
+
+
+    #plt.plot(date_val_1, floor_2.totals, label="Floor 2")
+
+
+    #plt.plot(date_val_2, floor_3.totals, label="Floor 3")
+
+
+    #plt.plot(date_val_3, front_desk.totals, label="Front_desk")
+    plt.legend()
+    plt.show()
 
     end = time.time()
     print("END TIME:",end)
