@@ -1,101 +1,94 @@
-import os
 from datetime import datetime
 
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.pyplot import figure
 from pymongo import MongoClient
-from pprint import pprint
-import time
 
 
-CONNECTION_STRING ="mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
+def connect_to_db(username: str = "admin", password: str = "admin", host: str = "localhost", port: int = 27017):
+    connection_string = f"mongodb://{username}:{password}@{host}:{port}/?" \
+                        f"readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
-# connect to MongoDB, change the << MONGODB URL >> to reflect your own connection string
-client = MongoClient(CONNECTION_STRING)
-db=client.admin
-# Issue the serverStatus command and print the results
-serverStatusResult=db.command("serverStatus")
-#pprint(serverStatusResult)
+    client = MongoClient(connection_string)
+
+    # db = client.admin
+    # serverStatusResult = db.command("serverStatus")
+    # pprint(serverStatusResult)
+
+    return client
 
 
-def get_area_data(area_name: str):
-    date_val = []
+def get_area_data(df):
+    date = []
 
-    floor = df[(df["area_code"] == area_name)]
-
-    for t in floor.timestamp:
+    for t in df.timestamp:
+        t = int(t)
         ts = int(t / 1000)
         time_value = datetime.fromtimestamp(ts)
-        date_val.append(time_value)
+        date.append(time_value)
 
-    date_val = sorted(date_val)
-    return date_val, floor
+    return sorted(date)
 
 
 if __name__ == '__main__':
-    # Get the database
-    db_name = client.get_database("venezia-project")
-    db_collection=db_name["totals-per-area"]
+    # Database connection
+    mongo_client = connect_to_db()
+    db_name = mongo_client.get_database("venezia-project")
+    total_per_area_collection = db_name["totals-per-area"]
 
-    totals=db_collection.count_documents({})
+    # Find by area code
+    cursors_floor_1 = total_per_area_collection.find({"area_code": "floor_1"})
+    cursors_floor_2 = total_per_area_collection.find({"area_code": "floor_2"})
+    cursors_floor_3 = total_per_area_collection.find({"area_code": "floor_3"})
+    cursors_front_desk = total_per_area_collection.find({"area_code": "front_desk"})
 
-    print("TOTALE ELEMENTI",totals)
+    # Convert to dataframe
+    df_floor1 = pd.DataFrame(list(cursors_floor_1))
+    df_floor1["totals"] = df_floor1["totals"].astype("int32")
 
-    start = time.time()
-    print("START TIME: ", start)
-    abspath = os.path.abspath(__file__)
-    dname = os.path.dirname(abspath)
-    os.chdir(dname)
+    df_floor2 = pd.DataFrame(list(cursors_floor_2))
+    df_floor2["totals"] = df_floor2["totals"].astype("int32")
 
-    df = pd.read_csv("./data/Museo M9/totals_per_area.csv")
-    timestamp = df.timestamp
-    areaCode = df.area_code
-    totals = df.totals
-    alarms = df.alarms
-    date = df.date
+    df_floor3 = pd.DataFrame(list(cursors_floor_3))
+    df_floor3["totals"] = df_floor3["totals"].astype("int32")
 
-    #date_val, floor_1 = get_area_data("floor_1")
-    #date_val_1, floor_2 = get_area_data("floor_2")
-    #date_val_2, floor_3 = get_area_data("floor_3")
-    #date_val_3, front_desk = get_area_data("front_desk")
+    df_front_desk = pd.DataFrame(list(cursors_front_desk))
+    df_front_desk["totals"] = df_front_desk["totals"].astype("int32")
 
+    date_val_floor_1 = get_area_data(df_floor1)
+    date_val_floor_2 = get_area_data(df_floor2)
+    date_val_floor_3 = get_area_data(df_floor3)
+    date_val_front_desk = get_area_data(df_front_desk)
+
+    # Plot
     figure(figsize=(15, 8))
     plt.subplot(3, 2, 1)
-    #plt.plot(date_val, floor_1.totals, color="green", label="Floor_1")
-
+    plt.plot(date_val_floor_1, df_floor1.totals, color="green", label="Floor_1")
+    plt.legend()
 
     plt.subplot(3, 2, 2)
-    #plt.plot(date_val_1, floor_2.totals, color="red", label="Floor_2")
-
+    plt.plot(date_val_floor_2, df_floor2.totals, color="red", label="Floor_2")
+    plt.legend()
 
     plt.subplot(3, 2, 3)
-    #plt.plot(date_val_2, floor_3.totals, color="blue", label="Floor_3")
-
+    plt.plot(date_val_floor_3, df_floor3.totals, color="blue", label="Floor_3")
+    plt.legend()
 
     plt.subplot(3, 2, 4)
-    #plt.plot(date_val_3, front_desk.totals, color="black", label="Front_desk")
+    plt.plot(date_val_front_desk, df_front_desk.totals, color="black", label="Front_desk")
+    plt.legend()
 
     plt.subplot(3, 2, 5)
-    #plt.plot(date_val, floor_1.totals, label="Floor 1")
+    plt.plot(date_val_floor_1, df_floor1.totals, label="Floor 1")
+    plt.legend()
 
+    plt.plot(date_val_floor_2, df_floor2.totals, label="Floor 2")
+    plt.legend()
 
-    #plt.plot(date_val_1, floor_2.totals, label="Floor 2")
+    plt.plot(date_val_floor_3, df_floor3.totals, label="Floor 3")
+    plt.legend()
 
-
-    #plt.plot(date_val_2, floor_3.totals, label="Floor 3")
-
-
-    #plt.plot(date_val_3, front_desk.totals, label="Front_desk")
+    plt.plot(date_val_front_desk, df_front_desk.totals, label="Front_desk")
     plt.legend()
     plt.show()
-
-    end = time.time()
-    print("END TIME:",end)
-    print(end - start)
-    # print(df.head(5))
-    # print(timestamp)
-    # print(areaCode)
-    # print(totals)
-    # print(alarms)
-    # print(date)
