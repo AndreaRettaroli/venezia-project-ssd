@@ -9,9 +9,7 @@ from config import CONNECTION_STRING
 
 
 def connect_to_db():
-    client = MongoClient(CONNECTION_STRING)
-
-    return client
+    return MongoClient(CONNECTION_STRING)
 
 
 def convert_timestamp(df):
