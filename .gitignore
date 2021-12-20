@@ -152,3 +152,6 @@ fabric.properties
 
 #ignore data
 data/
+
+#ignore config file
+config.py
