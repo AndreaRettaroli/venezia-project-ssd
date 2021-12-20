@@ -11,10 +11,6 @@ from config import CONNECTION_STRING
 def connect_to_db():
     client = MongoClient(CONNECTION_STRING)
 
-    # db = client.admin
-    # serverStatusResult = db.command("serverStatus")
-    # pprint(serverStatusResult)
-
     return client
 
 
@@ -49,14 +45,17 @@ if __name__ == '__main__':
     df_floor1["totals"] = df_floor1["totals"].astype("int32")
     df_floor1 = df_floor1.sort_values(by="timestamp", ascending=True)
     # df_floor1 = df_floor1.iloc[1::300, :]  # Ogni 10 minuti
+
     df_floor2 = pd.DataFrame(list(cursors_floor_2))
     df_floor2["totals"] = df_floor2["totals"].astype("int32")
     df_floor2 = df_floor2.sort_values(by="timestamp", ascending=True)
-    # df_floor2 = df_floor2.iloc[1::1800, :]
+    # df_floor2 = df_floor2.iloc[1::300, :]
+
     df_floor3 = pd.DataFrame(list(cursors_floor_3))
     df_floor3["totals"] = df_floor3["totals"].astype("int32")
     df_floor3 = df_floor3.sort_values(by="timestamp", ascending=True)
     # df_floor3 = df_floor3.iloc[1::300, :]
+
     # Convert timestamp to date and add a column to dataframe
     date_val_floor_1 = convert_timestamp(df_floor1)
     df_floor1["date"] = date_val_floor_1
