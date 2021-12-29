@@ -1,4 +1,7 @@
+import pmdarima as pm
+
 from functions import *
+
 def auto_arima(df_floor):
     model = pm.auto_arima(df_floor.totals.values, test='adf', start_p=1, start_q=1,
                            max_p=3, max_q=3, m=1, d=None, D=None,
