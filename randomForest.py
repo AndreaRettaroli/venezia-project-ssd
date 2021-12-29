@@ -9,7 +9,7 @@ def random_forest(df_floor,look_back):
     # transform the time series data into supervised learning
     data = series_to_supervised(values, n_in=look_back,n_out=look_back)
     # evaluate
-    mae, y, yhat = walk_forward_validation(data, 12)
+    mae, y, yhat = walk_forward_validation(data, look_back)
     print('MAE: %.3f' % mae)
     # plot expected vs predicted
     pyplot.plot(y, label='Expected')
