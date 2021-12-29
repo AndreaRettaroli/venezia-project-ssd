@@ -1,10 +1,10 @@
+from keras import Sequential
+from keras.layers import Dense
+import math
+
 from functions import *
 
-def mlp_forecast(df_floor):
-    # look_back = 1008 #1week
-    look_back = 2016  # 2week
-    # look_back = 4320 #month
-
+def mlp_forecast(df_floor,look_back):
     # split into train and test sets
     train_size = int(len(df_floor.totals) - look_back)
     test_size = len(df_floor.totals) - train_size
