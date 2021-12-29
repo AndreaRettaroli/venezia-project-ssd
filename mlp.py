@@ -16,8 +16,7 @@ def mlp_forecast(df_floor,look_back):
 
     # Define model
     model = Sequential()
-    model.add(Dense(128, input_dim=look_back, activation='relu'))  # 8 hidden neurons
-    # model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, input_dim=look_back, activation='relu'))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(32, activation='relu'))
     model.add(Dense(1))  # 1 output neuron
