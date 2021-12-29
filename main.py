@@ -1,6 +1,12 @@
+from matplotlib.pyplot import figure
+from statsmodels.tsa.seasonal import seasonal_decompose
+
 from functions import *
 from arima import auto_arima
+from lstm import lstm_forecast
 from mlp import mlp_forecast
+from constants import *
+from randomForest import random_forest
 
 if __name__ == '__main__':
     """ Connect to DB """
@@ -97,11 +103,11 @@ if __name__ == '__main__':
     # compute_mean_and_variance(df_floor3.totals)
 
     """ Plot seasonal decompose of each area """
-    # ds_floor_1 = df_floor1[df_floor1.columns[0]]
-    # result = seasonal_decompose(ds_floor_1, model='additive', period=1)
-    # result.plot()
+    ds_floor_1 = df_floor1[df_floor1.columns[0]]
+    result = seasonal_decompose(ds_floor_1, model='additive', period=1)
+    result.plot()
     #
-    # plt.show()
+    plt.show()
     #
     # # ds_floor_2 = ds_floor_2[ds_floor_2.columns[0]]
     # # result = seasonal_decompose(ds_floor_2, model='additive', period=1)
@@ -116,12 +122,17 @@ if __name__ == '__main__':
     # # plt.legend()
 
     """ Forecasting with Statistical model """
-    auto_arima(df_floor1)
+    #auto_arima(df_floor1)
     #auto_arima(df_floor2)
     #auto_arima(df_floor3)
     """ Forecasting with Machine Learning model """
+    random_forest(df_floor1,WEEK_LOOK_BACK)
 
     """ Forecasting with Neural model """
-    mlp_forecast(df_floor1)
-    #mlp_forecast(df_floor2)
-    #mlp_forecast(df_floor3)
+    #mlp_forecast(df_floor1,WEEK_LOOK_BACK)
+    #mlp_forecast(df_floor2,WEEK_LOOK_BACK)
+    #mlp_forecast(df_floor3,WEEK_LOOK_BACK)
+
+    #lstm_forecast(df_floor1,WEEK_LOOK_BACK)
+    #lstm_forecast(df_floor2, WEEK_LOOK_BACK)
+    #lstm_forecast(df_floor3, WEEK_LOOK_BACK)
