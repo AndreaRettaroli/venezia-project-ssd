@@ -26,6 +26,15 @@ def create_dataset(dataset, look_back=1):
     return np.array(dataX), np.array(dataY)
 
 
+def create_dataset_2(dataset, look_back=1):
+    dataX, dataY = [], []
+    for i in range(len(dataset) - look_back - 1):
+        a = dataset[i:(i + look_back), 0]
+        dataX.append(a)
+        dataY.append(dataset[i + look_back, 0])
+    return np.array(dataX), np.array(dataY)
+
+
 def get_range_by_date(data, start, finish):
     data["date"] = pd.to_datetime(data.date)
     mask = (data.date > start) & (data.date <= finish)
@@ -120,18 +129,19 @@ def train_test_split(data, n_test):
 
 # fit an random forest model and make a one step prediction
 def random_forest_forecast(train, testX):
-        # transform list into array
-        train = asarray(train)
-        # split into input and output columns
-        trainX, trainy = train[:, :-1], train[:, -1]
-        # fit model
-        model = RandomForestRegressor(n_estimators=10)
-        print("fit init")
-        model.fit(trainX, trainy)
-        print("fit end")
-        # make a one-step prediction
-        yhat = model.predict([testX])
-        return yhat[0]
+    # transform list into array
+    train = asarray(train)
+    # split into input and output columns
+    trainX, trainy = train[:, :-1], train[:, -1]
+    # fit model
+    model = RandomForestRegressor(n_estimators=10)
+    print("fit init")
+    model.fit(trainX, trainy)
+    print("fit end")
+    # make a one-step prediction
+    yhat = model.predict([testX])
+    return yhat[0]
+
 
 # walk-forward validation for univariate data
 def walk_forward_validation(data, n_test):

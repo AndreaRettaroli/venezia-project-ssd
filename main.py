@@ -5,6 +5,7 @@ from constants import *
 from functions import *
 from mlp import mlp_forecast
 from sarimax import auto_arima_for_sarimax
+from lstm import lstm_forecast
 
 if __name__ == '__main__':
     """ Connect to DB """
@@ -81,31 +82,31 @@ if __name__ == '__main__':
     # plt.legend()
 
     """ Autocorrelation """
-    autocorrelation(df_floor1.totals)
+    # autocorrelation(df_floor1.totals)
     # autocorrelation(df_floor2.totals)
     # autocorrelation(df_floor3.totals)
 
     """ ADF """
-    adf_fuller(df_floor1.totals)
+    # adf_fuller(df_floor1.totals)
     # adf_fuller(df_floor2.totals)
     # adf_fuller(df_floor3.totals)
 
     """ KPPS """
-    function_kpss(df_floor1.totals)
+    # function_kpss(df_floor1.totals)
     # function_kpss(df_floor2.totals)
     # function_kpss(df_floor3.totals)
 
     """ Compute meaning and variance """
-    compute_mean_and_variance(df_floor1.totals)
+    # compute_mean_and_variance(df_floor1.totals)
     # compute_mean_and_variance(df_floor2.totals)
     # compute_mean_and_variance(df_floor3.totals)
 
     """ Plot seasonal decompose of each area """
-    ds_floor_1 = df_floor1[df_floor1.columns[0]]
-    result = seasonal_decompose(ds_floor_1, model='additive', period=1)
-    result.plot()
-
-    plt.show()
+    # ds_floor_1 = df_floor1[df_floor1.columns[0]]
+    # result = seasonal_decompose(ds_floor_1, model='additive', period=1)
+    # result.plot()
+    #
+    # plt.show()
 
     # ds_floor_2 = df_floor2[df_floor2.columns[0]]
     # result = seasonal_decompose(ds_floor_2, model='additive', period=1)
@@ -133,6 +134,6 @@ if __name__ == '__main__':
     # mlp_forecast(df_floor2,WEEK_LOOK_BACK)
     # mlp_forecast(df_floor3,WEEK_LOOK_BACK)
 
-    # lstm_forecast(df_floor1,WEEK_LOOK_BACK)
+    lstm_forecast(df_floor1, WEEK_LOOK_BACK)
     # lstm_forecast(df_floor2, WEEK_LOOK_BACK)
     # lstm_forecast(df_floor3, WEEK_LOOK_BACK)
