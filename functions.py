@@ -94,8 +94,8 @@ def convert_timestamp(df):
 
     # transform a time series dataset into a supervised learning dataset
 def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
-        n_vars = 1 if type(data) is list else data.shape[0]
-        df = DataFrame(data)
+        n_vars = 1 if type(data.totals) is list else data.shape[0]
+        df = DataFrame(data.totals)
         cols = list()
         # input sequence (t-n, ... t-1)
         for i in range(n_in, 0, -1):
@@ -121,8 +121,10 @@ def random_forest_forecast(train, testX):
         # split into input and output columns
         trainX, trainy = train[:, :-1], train[:, -1]
         # fit model
-        model = RandomForestRegressor(n_estimators=1000)
+        model = RandomForestRegressor(n_estimators=10)
+        print("fit init")
         model.fit(trainX, trainy)
+        print("fit end")
         # make a one-step prediction
         yhat = model.predict([testX])
         return yhat[0]
