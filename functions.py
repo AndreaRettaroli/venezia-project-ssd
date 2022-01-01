@@ -15,6 +15,31 @@ from statsmodels.tsa.stattools import kpss
 from config import CONNECTION_STRING
 
 
+def compute_mean_date_difference(df_floor):
+    seconds_in_ten_minutes = 600
+    seconds_in_one_hour = 3600
+    date_differences = []
+    first, second = None, None
+
+    for index, row in df_floor.iterrows():
+        if index == 0:
+            first = row.date
+            continue
+
+        second = row.date
+
+        difference = (pd.to_datetime(second) - pd.to_datetime(first)).total_seconds()
+
+        first = second
+
+        if difference >= 0 and difference <= seconds_in_one_hour:
+            date_differences.append(difference)
+
+    mean = round(sum(date_differences) / len(date_differences))
+
+    return round(seconds_in_ten_minutes / mean)
+
+
 # from series of values to windows matrix
 def create_dataset(dataset, look_back=1):
     dataX, dataY = [], []
