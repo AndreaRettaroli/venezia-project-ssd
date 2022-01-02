@@ -24,7 +24,7 @@ def mlp_forecast(df_floor, look_back):
     model.add(Dense(32, activation='relu'))
     model.add(Dense(1))  # 1 output neuron
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(trainX, trainY, epochs=300, verbose=2)
+    model.fit(trainX, trainY, epochs=500, verbose=2)
 
     # Estimate model performance
     trainScore = model.evaluate(trainX, trainY, verbose=0)
@@ -38,17 +38,11 @@ def mlp_forecast(df_floor, look_back):
     trainPredict = model.predict(trainX)
     testForecast = model.predict(testX)
 
-    forcast_data = testForecast.transpose()
-    generated_forcast_data_X = np.tile(forcast_data, (look_back, 1))
-    test_forecast_on_generated = model.predict(generated_forcast_data_X)
+
 
     plt.plot(df_floor.totals, color="blue", label="data")
     plt.plot(np.concatenate((np.full(look_back - 1, np.nan), trainPredict[:, 0])), color="yellow", label="Prediction")
-
     plt.plot(np.concatenate((np.full(len(train) - 1, np.nan), testForecast[:, 0])), color="green", label="Forecasting")
 
-    forecast_1 = np.concatenate((np.full(len(train) - 1, np.nan), testForecast[:, 0]))
-    plt.plot(np.concatenate((np.full(len(forecast_1) - 1, np.nan), test_forecast_on_generated[:, 0])), color="red",
-             label="ForecastingF")
     plt.legend()
     plt.show()
