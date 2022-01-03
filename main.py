@@ -4,6 +4,7 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 from arima import auto_arima
 from constants import *
 from functions import *
+from lstm_window import lstm_window
 from mlp import mlp_forecast
 from mlp_window import mlp_forecast_window
 from sarimax import auto_arima_for_sarimax
@@ -140,9 +141,11 @@ if __name__ == '__main__':
     # mlp_forecast(df_floor1, WEEK_LOOK_BACK)
     # mlp_forecast(df_floor2, WEEK_LOOK_BACK)
     # mlp_forecast(df_floor3, WEEK_LOOK_BACK)
-    mlp_forecast_window(df_floor1, WEEK_LOOK_BACK)
+    # mlp_forecast_window(df_floor1, WEEK_LOOK_BACK)
     # mlp_forecast_window(df_floor3, WEEK_LOOK_BACK)
 
     # lstm_forecast(df_floor1, WEEK_LOOK_BACK)
     # lstm_forecast(df_floor2, WEEK_LOOK_BACK)
-    #lstm_forecast(df_floor3, WEEK_LOOK_BACK)
+    # lstm_forecast(df_floor3, WEEK_LOOK_BACK)
+
+    lstm_window(df_floor1, WEEK_LOOK_BACK)
