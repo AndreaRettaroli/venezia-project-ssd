@@ -26,7 +26,7 @@ def mlp_forecast_window(df_floor, window_size):
     model.add(Dense(32, activation='relu'))
     model.add(Dense(1))  # 1 output neuron
     model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(trainX, trainY, epochs=5, verbose=2)
+    model.fit(trainX, trainY, epochs=100, verbose=2)
 
     # Estimate model performance
     trainScore = model.evaluate(trainX, trainY, verbose=0)
@@ -41,17 +41,22 @@ def mlp_forecast_window(df_floor, window_size):
     testForecast = model.predict(testX)
 
     mlp_predictions_scaled = list()
-    batch = valX[-window_size:]
+    mlp_predictions_scaled_1 = list()
+    mlp_predictions_scaled_diag = list()
+    batch = valX[-window_size*2:-window_size]
     curbatch = batch.reshape((window_size,window_size)) # 1 dim more
 
     # v1=curbatch
-    for i in range(2018):
+    for i in range(3024):
 
         #mlp_pred = model.predict(curbatch)[0]
         mlp_pred_p = model.predict(curbatch)
-        mlp_predictions_scaled.append(mlp_pred_p)
+        mlp_predictions_scaled.append(mlp_pred_p[0])
+        mlp_predictions_scaled_diag.append(mlp_pred_p[i % 1008])
+        mlp_predictions_scaled_1.append(mlp_pred_p)
         curbatch = np.append(curbatch[:, 1:], mlp_pred_p, axis=1)
-        #curbatch = np.append(curbatch[:, 1:], [[mlp_pred]], axis=1)
+        #curbatch = np.append(curbatch[:, 1:], mlp_pred, axis=1)
+        #curbatch = np.append(curbatch[:, 1:], [mlp_pred], axis=1)
 
         # print(len(curbatch))
         # curbatch = np.append(curbatch, [[mlp_pred]])
@@ -65,6 +70,11 @@ def mlp_forecast_window(df_floor, window_size):
 
 
     yfore = np.transpose(mlp_predictions_scaled).squeeze()
+    yfore1 = np.transpose(mlp_predictions_scaled_1).squeeze()
+    ydiag = np.transpose(mlp_predictions_scaled_diag).squeeze()
+
+    # Y1=mlp_predictions_scaled.squeeze()
+    # Y2=np.transpose(mlp_predictions_scaled)
 
     #forcast_data = testForecast.transpose()
     #generated_forcast_data_X = np.tile(forcast_data, (window_size, 1))
@@ -74,7 +84,13 @@ def mlp_forecast_window(df_floor, window_size):
     plt.plot(np.concatenate((np.full(window_size - 1, np.nan), trainPredict[:, 0])), color="yellow", label="Prediction")
 
     plt.plot(np.concatenate((np.full(len(train) - 1, np.nan), testForecast[:, 0])), color="green", label="Forecasting")
-    plt.plot(np.concatenate((np.full(len(train) - 1, np.nan),  yfore[:,0])), color="red", label="Forecasting-window")
+    #plt.plot(np.concatenate((np.full(len(train) - 1, np.nan),  yfore[:])), color="red", label="Forecasting-window")
+
+    #plt.plot(np.concatenate((np.full(len(train) - 1, np.nan), yfore1[0,:])), color="black", label="Forecasting-window")
+    #diagonal = np.diagonal(yfore1)
+    #plt.plot(np.concatenate((np.full(len(train) - 1, np.nan), diagonal[:])), color="purple", label="Forecasting-window")
+    plt.plot(np.concatenate((np.full(len(train) - 1, np.nan), ydiag[:])), color="pink", label="Forecasting-window")
+    # plt.plot(np.concatenate((np.full(len(train) - 1, np.nan), Y2[:, 0])), color="purple", label="Forecasting-window")
     #forecast_1 = np.concatenate((np.full(len(train) - 1, np.nan), testForecast[:, 0]))
     #plt.plot(np.concatenate((np.full(len(forecast_1) - 1, np.nan), test_forecast_on_generated[:, 0])), color="red",
     #         label="ForecastingF")
