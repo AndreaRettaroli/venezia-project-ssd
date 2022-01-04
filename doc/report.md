@@ -10,7 +10,7 @@
 
 
 
-Obbiettivo
+# Obbiettivo
 
 L'obbiettivo di questo progetto è quello di riuscire a fare delle previsioni sulle serie storiche dell'M9Museum di Venezia. Le serie storiche che compongono il dataset monitorano l'affluenza al museo nelle tre sale. 
 Utilizzando modelli statistici, di machine learning e infine modelli neurali si vuole prevedere l'afflusso di visitatori al museo. 
@@ -47,7 +47,7 @@ Timestamp in milliseconds: 1640692068000
 Date and time (GMT): Tuesday 28 December 2021 11:47:48
 **Date and time (your time zone)**: martedì 28 dicembre 2021 12:47:48 GMT+01:00
 
-A seguito di questa conversione e di alcuni calcoli per calcolare la media dei secondi tra un rilevamento e l'altro si nota che le misurazioni avvengono ogni 2 secondi per ognuno dei tre piani. 
+A seguito di questa conversione e di alcune operazioni per calcolare la media dei secondi tra un rilevamento e l'altro si nota che le misurazioni avvengono ogni 2 secondi per ognuno dei tre piani. 
 Si decide che per costruire la serie si prendono i riferimenti definendo un lasso temporale sensato. Il grafico seguente mostra la serie costruita dall'intero dataset.
 
 **AGGIUNGERE IMMAGINE GENERALE.PNG**
@@ -72,10 +72,10 @@ Si ragiona anche alla possibilità di eseguire i metodi neurali su Colab al fine
 
 Una volta letti e compresi i dati si decide di ottimizzare il processo di lettura al fine di migliorare le prestazioni;
 a tale scopo si decide di utilizzare un database, nello specifico MongoDB che permette l'import di dati da CSV in 
-maniera molto semplice. Si è deciso di creare un file config.py che non viene pushato nel repository ma viene tenuto 
-in locale con la stringa di connessione. Si decide di ottimizzare anche le letture filtrando già i dati per piano in 
+maniera molto semplice. Viene creato un file config.py che non viene pushato nel repository ma viene tenuto 
+in locale con la stringa di connessione al DB. Si decide di ottimizzare anche le letture filtrando già i dati per piano in 
 modo da lavorare su un singolo piano alla volta, così facendo i tempi necessari a questa fase si sono ridotti 
-drasticamente. Successivamente si decide di rimuovere anche le colonne non utili dal dataset per velocizzare le
+drasticamente. Successivamente si pensa di rimuovere anche le colonne non utili dal dataset per velocizzare le
 esecuzioni. Come detto precedentemente i dati vengono raccolti in intervalli di 10 minuti, in questo modo la quantità di dati da elaborare si riduce enormemente (si prende un dato ogni 300) pur mantenendo l'andamento reale dei dati. 
 
 Successivamente viene fatto preprocessing e analisi specifiche sui dati. 
@@ -84,9 +84,9 @@ Successivamente viene fatto preprocessing e analisi specifiche sui dati.
 
 Questa è una delle fasi principali e più importanti per l'elaborazione dati. In questa fase si determinano le caratteristiche della serie che permettono di individuare i metodi migliori per andare a fare forecasting su di esse. In particolare ci interessa individuare eventuali componenti di trend e di stagionalità nella serie. Si applica il seasonal decompose per verificare la presenza di queste componenti. La figura seguente mostra un esempio di seasonal decompose nella serie legata al floor 1. 
 
-E' evidente che non vi sono componenti di stagionalità né tanto meno di trend. E' più probabile infatti avere delle componenti di trend o stagionalità in intervallo di tempi minori come un mese o una sola stagione come l'estate.
+E' evidente che non vi sono componenti di stagionalità né tanto meno di trend. E' più probabile infatti avere delle componenti di trend o stagionalità in un intervallo temporale minore come un mese o una sola stagione come l'estate.
 
-Dato che la serie non presenta alcuna componente si è voluto verificare se fosse stazionaria, in prima istanza con due test
+Successivamente si è voluto verificare se fosse stazionaria, vengono calcolate media e varianza e in seguito si eseguono due test
 statistici: adf e kpss. Il test ADF Dickey-Fuller aumentato i cui risultati sono visibili nella figura seguente. 
 
 **figura screen adf **
@@ -105,7 +105,7 @@ Viene anche determinata l'autocorrelazione, l'immagine seguente mostra l'autocor
 
 **Immagine autocorrelazione**
 
-Determinare questi aspetti è essenziale al fine di capire se è necessario andare a fare delle operazioni alla serie prima di applicare i modelli. Una volta valutati i risultati si sceglie di non effettuare modifiche alla serie con le apposite tecniche. Inoltre, la serie non mostra outlier. 
+Determinare questi aspetti è essenziale al fine di capire se è necessario andare a fare delle operazioni alla serie prima di applicare i modelli. Una volta valutati i risultati si sceglie di non effettuare modifiche alla serie con le apposite tecniche.
 
 ## Modelli per la previsione e il forecasting
 
@@ -113,10 +113,14 @@ In questa fase vengono realizzati alcuni modelli di diverso tipo per la fase di 
 
 ### Modelli statistici
 
-Il fatto che la serie non sia stagionale ci porta a scegliere ARIMA come metodo statistico da applicare. Come ci si aspettava però il modello ARIMA non è abbastanza potente
+Il fatto che la serie non abbia stagionalità ci porta a scegliere ARIMA come metodo statistico da applicare. Come ci si aspettava però il modello ARIMA non è abbastanza potente
 per il forecasting mentre per la predizione dei dati in-sample il modello si comporta discretamente.
 
 **Immagine ARIMA piano 1**
+
+Su consiglio del Prof.re Maniezzo ci viene proposto di provare con SARIMAX nonostante non vi sia una componente di stagionalità, i risultati sono simili a quelli ottenuti con ARIMA. 
+
+**Immagine Sarimax piano1**
 
 ### Machine Learning
 
@@ -124,7 +128,7 @@ per il forecasting mentre per la predizione dei dati in-sample il modello si com
 
 Come successivo modello si è provato un modello di machine learning come RandomForest anche in questo caso però ci sono stati dei problemi
 legati alla complessità dei dati intesa come dimensione che causava una elaborazione onerosa e non sostenibile da una macchina locale. 
-Si è provato ad addestrare il modello RandomForest per circa 6 ore senza riuscire ad ottenere risultati a causa dei lunghissimi tempi di addestramento.
+Si è provato ad addestrare il modello RandomForest con 10 alberi(valore molto piccolo di prova) per circa 6 ore, stampando le singole previsioni, i risultati mostravano comunque un discreto errore, si è così deciso di lasciar perdere con questo modello perchè privi di macchine capaci di sostenere un'elaborazione così esosa.
 
 ### Deep Learning 
 
@@ -132,10 +136,10 @@ Si è provato ad addestrare il modello RandomForest per circa 6 ore senza riusci
 
 Passando ai modelli di deep learning il multi layer perceptron (MLP) è stato il modello che ha portato dei risultati migliori 
 in termine di previsione e forecasting con un giusto tempo di addestramento. 
-Il modello viene addestrato sui dati di train set che rappresentano l'insieme dei dati fino alla parte restante dedicata al test set.
+Il modello viene addestrato sui dati di train set che rappresentano l'insieme dei dati fino alla parte restante dedicata al test set configurabile con i parametri disponibili nel file constans.py.
 
 La struttura della rete presenta un input di un numero di input dato dalla variabile **look_back** che indica quanti dati 
-considerare per la finestra temporale. Successivamente gli hidden layer sono costituiti da layer che vanno dai 128 a 32 secondo la classica potenza a 2.
+considerare per la finestra temporale. Successivamente gli hidden layer sono costituiti da layer che vanno dai 128 a 32 secondo la classica potenza di 2.
 La funzione di attivazione che viene utilizzata è relu in quanto è solitamente quella più efficace evitando il problema del vanishing gradient.
 
 L'ultimo layer presenta solo un neurone di output.
@@ -150,7 +154,7 @@ Mentre sulla parte di test l'errore è più rilevante ma comunque buono.
 
 Inoltre come richiesto abbiamo provato a utilizzare una window anche al di fuori dei dati (out-of-sample) per cercare di predire l'andamento 
 oltre ai dati forniti, l'andamento non è ottimale ma essendo che i dati a occhio e attraverso analisi 
-hanno un andamento difficilmente prevedibile non è da considerare nemmeno pessimo. 
+hanno un andamento difficilmente prevedibile non è da considerare nemmeno pessimo in quanto rispecchia comunque l'andamento della funzione nei momenti di crescita e di decrescita.
 
 **Immagine MLP piano 1 forecasting oltre i dati**
 
@@ -163,7 +167,7 @@ ci si aspettava un incremento delle prestazioni in quanto le RNN (Recurrent Neur
 per problemi come le serie temporali in cui è importante la "memoria".
 
 In questo caso la struttura della rete presenta 10 neuroni o celle LSTM con una loss uguale al modello MLP e otimizzatore ADAM.
-In questo caso la rete viene addestrata solo utilizzando 10 epoche dal momento che le RNN come le reti convoluzionali richiedono
+La rete viene addestrata solo utilizzando 10 epoche dal momento che le RNN come le reti convoluzionali richiedono
 più calcoli delle normali reti deep.
 
 **Immagine LSTM piano 1 predict e forecasting**
