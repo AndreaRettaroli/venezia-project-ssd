@@ -149,3 +149,9 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+#ignore data
+data/
+
+#ignore config file
+config.py

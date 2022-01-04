@@ -1,0 +1,3 @@
+WEEK_LOOK_BACK = 1008  # 1 week
+DOUBLE_WEEK_LOOK_BACK = 2016  # 2 week
+MONTH_LOOK_BACK = 4320  # month
