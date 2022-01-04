@@ -1,6 +1,7 @@
 from matplotlib.pyplot import figure
 from statsmodels.tsa.seasonal import seasonal_decompose
 
+from diebold_mariano import *
 from arima import auto_arima
 from constants import *
 from functions import *
@@ -11,6 +12,7 @@ from sarimax import auto_arima_for_sarimax
 from lstm import lstm_forecast
 
 if __name__ == '__main__':
+
     """ Connect to DB """
     mongo_client = connect_to_db()
 
@@ -138,14 +140,30 @@ if __name__ == '__main__':
     # random_forest(df_floor1, WEEK_LOOK_BACK)
 
     """ Forecasting with Neural model """
-    # mlp_forecast(df_floor1, WEEK_LOOK_BACK)
-    # mlp_forecast(df_floor2, WEEK_LOOK_BACK)
-    # mlp_forecast(df_floor3, WEEK_LOOK_BACK)
+    # MLP = mlp_forecast(df_floor1, WEEK_LOOK_BACK)
+    # MLP = mlp_forecast(df_floor2, WEEK_LOOK_BACK)
+    # MLP = mlp_forecast(df_floor3, WEEK_LOOK_BACK)
     # mlp_forecast_window(df_floor1, WEEK_LOOK_BACK)
     # mlp_forecast_window(df_floor3, WEEK_LOOK_BACK)
 
-    # lstm_forecast(df_floor1, WEEK_LOOK_BACK)
-    # lstm_forecast(df_floor2, WEEK_LOOK_BACK)
-    # lstm_forecast(df_floor3, WEEK_LOOK_BACK)
+    # LSTM = lstm_forecast(df_floor1, WEEK_LOOK_BACK)
+    # LSTM = lstm_forecast(df_floor2, WEEK_LOOK_BACK)
+    # LSTM = lstm_forecast(df_floor3, WEEK_LOOK_BACK)
 
     lstm_window(df_floor1, WEEK_LOOK_BACK)
+
+
+    #diebold mariano
+    # actual=get_actual(df_floor1,WEEK_LOOK_BACK)
+
+    # # Supponiamo che la differenza tra il primo elenco di previsione e i valori effettivi sia e1
+    # # e il secondo elenco di previsione e il valore effettivo sia e2. La lunghezza delle serie temporali è T.
+    # # Allora d può essere definito in base a un criterio diverso ( crit ).
+    # # MSE : d = (e1)^2 - (e2)^2
+    # # MAD : d = abs(e1) - abs(e2)
+    # # MAPPE: d = abs((e1 - effettivo)/(effettivo))
+    # # Poly: d = (e1)^potenza - (e2)^potenza
+    # # L'ipotesi nulla è E[d] = 0.
+    # # Le statistiche del test seguono la distribuzione T studente con grado di libertà (T - 1).
+
+    # dm_test(actual, MLP, LSTM)# default crit = mse
