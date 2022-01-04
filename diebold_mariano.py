@@ -126,5 +126,5 @@ def dm_test(actual_df_floor_list, MLP_list, LSTM_list, h = 1, crit="MSE", power 
     dm_return = collections.namedtuple('dm_return', 'DM p_value')
 
     rt = dm_return(DM=DM_stat, p_value=p_value)
-
+    print(rt)
     return rt
