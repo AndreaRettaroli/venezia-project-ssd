@@ -190,3 +190,6 @@ def walk_forward_validation(data, n_test):
     # estimate prediction error
     error = mean_absolute_error(test[:, -1], predictions)
     return error, test[:, -1], predictions
+
+def get_actual(data,window_size):
+    return  data.totals[-window_size:]
