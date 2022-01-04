@@ -55,18 +55,8 @@ def mlp_forecast_window(df_floor, window_size):
         mlp_predictions_scaled_diag.append(mlp_pred_p[i % 1008])
         mlp_predictions_scaled_1.append(mlp_pred_p)
         curbatch = np.append(curbatch[:, 1:], mlp_pred_p, axis=1)
-        #curbatch = np.append(curbatch[:, 1:], mlp_pred, axis=1)
-        #curbatch = np.append(curbatch[:, 1:], [mlp_pred], axis=1)
 
-        # print(len(curbatch))
-        # curbatch = np.append(curbatch, [[mlp_pred]])
-        # print(len(curbatch))
-        # curbatch = np.delete(curbatch, 0)
-        # print(len(curbatch))
-        # curbatch = batch.reshape((window_size, window_size, 1))
-        # v2=curbatch
-        # res=np.array_equal(v1, v2, equal_nan=False)
-        # print(res)
+
 
 
     yfore = np.transpose(mlp_predictions_scaled).squeeze()
