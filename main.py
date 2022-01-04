@@ -1,14 +1,8 @@
-from matplotlib.pyplot import figure
-from statsmodels.tsa.seasonal import seasonal_decompose
-
-from arima import auto_arima
 from constants import *
 from functions import *
-from lstm_window import lstm_window
-from mlp import mlp_forecast
-from mlp_window import mlp_forecast_window
-from sarimax import auto_arima_for_sarimax
 from lstm import lstm_forecast
+from lstm_window import lstm_window
+from sarimax import auto_arima_for_sarimax
 
 if __name__ == '__main__':
     """ Connect to DB """
@@ -129,7 +123,7 @@ if __name__ == '__main__':
     """ Forecasting with Statistical model """
     # auto_arima(df_floor1, MONTH_LOOK_BACK)
     # auto_arima(df_floor2, MONTH_LOOK_BACK)
-    #auto_arima(df_floor3, MONTH_LOOK_BACK)
+    # auto_arima(df_floor3, MONTH_LOOK_BACK)
 
     # auto_arima_for_sarimax(df_floor1, WEEK_LOOK_BACK)
     # auto_arima_for_sarimax(df_floor2, WEEK_LOOK_BACK)
@@ -144,8 +138,8 @@ if __name__ == '__main__':
     # mlp_forecast_window(df_floor1, WEEK_LOOK_BACK)
     # mlp_forecast_window(df_floor3, WEEK_LOOK_BACK)
 
-    # lstm_forecast(df_floor1, WEEK_LOOK_BACK)
+    lstm_forecast(df_floor1, WEEK_LOOK_BACK)
     # lstm_forecast(df_floor2, WEEK_LOOK_BACK)
     # lstm_forecast(df_floor3, WEEK_LOOK_BACK)
 
-    lstm_window(df_floor1, WEEK_LOOK_BACK)
+    # lstm_window(df_floor1, WEEK_LOOK_BACK)

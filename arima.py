@@ -1,6 +1,9 @@
+import pickle
+
 import pmdarima as pm
 
 from functions import *
+from statsmodels.tsa.arima_model import ARIMAResults
 
 def auto_arima(df_floor, periods):
     model = pm.auto_arima(df_floor.totals.values, test='adf', start_p=1, start_q=1,
@@ -8,6 +11,15 @@ def auto_arima(df_floor, periods):
                            seasonal=False, stationary=True, start_P=0, trace=True, stepwise=True)
     print(model.summary())
     fitted = model.fit(df_floor.totals)
+
+    # Load model
+    # with open('models/arima.pkl', 'rb') as pkl:
+    #     fitted = pickle.load(pkl)
+
+    # Serialize with Pickle
+    with open('models/arima.pkl', 'wb') as pkl:
+        pickle.dump(fitted, pkl)
+
     yfore = fitted.predict(n_periods=periods)  # forecast
     ypred = fitted.predict_in_sample()
     plt.plot(df_floor.totals, color="blue", label="Data")

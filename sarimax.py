@@ -1,3 +1,5 @@
+import pickle
+
 import pmdarima as pm
 from matplotlib import pyplot as plt
 from statsmodels.tsa.statespace.sarimax import SARIMAX
@@ -23,7 +25,15 @@ def auto_arima_for_sarimax(df_floor, forecast_to):  # auto arima
 def sarimax(df_floor, morder, mseasorder, forecast_to):
     sarima_model = SARIMAX(df_floor.totals, order=morder, seasonal_order=mseasorder)
     sfit = sarima_model.fit()
-    sfit.save('sarima_model.pkl')  # save model
+
+    # Load model
+    # with open('models/sarimax.pkl', 'rb') as pkl:
+    #     fitted = pickle.load(pkl)
+
+    # Serialize with Pickle
+    with open('models/sarimax.pkl', 'wb') as pkl:
+        pickle.dump(sfit, pkl)
+
     sfit.plot_diagnostics()
     plt.show()
     ypred = sfit.predict(start=0, end=len(df_floor))
