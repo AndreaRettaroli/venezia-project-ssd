@@ -46,3 +46,5 @@ def mlp_forecast(df_floor, look_back):
 
     plt.legend()
     plt.show()
+
+    return testForecast

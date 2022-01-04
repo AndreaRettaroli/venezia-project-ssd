@@ -62,3 +62,5 @@ def lstm_forecast(df_floor, look_back):
     plt.plot(testPredictPlot, color="green", label="forecasting")
     plt.legend()
     plt.show()
+
+    return  testPredictPlot
