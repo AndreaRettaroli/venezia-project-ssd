@@ -160,7 +160,7 @@ Il fatto che la serie non abbia stagionalità ci porta a scegliere ARIMA come me
 
 ![](../img/arima.png)
 
-Su consiglio del Prof.re Maniezzo ci viene proposto di provare con SARIMAX nonostante non vi sia una componente di stagionalità, i risultati sono simili a quelli ottenuti con ARIMA. 
+Su consiglio del Prof.re Maniezzo ci viene proposto di provare con SARIMAX, i risultati sono simili a quelli ottenuti con ARIMA. 
 
 ![](../img/sarimax.jpg)
 
